@@ -36,5 +36,5 @@ Then open a browser with the url `localhost:5000`
 
 
 # Useful links
-* [Docker file reference](https://docs.docker.com/engine/reference/builder/)
-* [gunicorn reference](http://docs.gunicorn.org/en/stable/configure.html)
+* [Docker file reference](https://docs.docker.com/engine/reference/builder/){:target="_blank"}
+* [gunicorn reference](http://docs.gunicorn.org/en/stable/configure.html){:target="_blank"}
