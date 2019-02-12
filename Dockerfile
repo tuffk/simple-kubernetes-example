@@ -12,13 +12,4 @@ COPY requirements.txt /app/requirements.txt
 RUN pip install -r requirements.txt
 
 # add source files to the docker
-COPY server.py server.py
-
-# gunicorn starts the server
-ENTRYPOINT ["gunicorn", "-w", "1", "--chdir", "/app", "server:app", "-b", ":80", "--name=app", "--access-logfile=-"]
-
-# run locally
-# building
-# docker build -t catedra .
-# runnning
-# docker run --rm --name srvr -e HELLO_ENV=dokcer -p 80:80 catedra
+COPY manage.py manage.py
