@@ -29,7 +29,7 @@ data:
 
         # Donde esta expuesta el api
         upstream api {
-            server 127.0.0.1:80;
+            server 127.0.0.1:8080;
         }
 
         server {
@@ -110,7 +110,7 @@ spec:
         - '1'
         - --chdir
         - /app
-        - server:app
+        - manage:app
         - -b
         - :8080
         - --name

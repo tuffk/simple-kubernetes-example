@@ -18,7 +18,7 @@ def hello_get(name: str) -> str:
 
 
 @app.route("/", methods=["POST"])
-def hello_post(name: str) -> str:
+def hello_post() -> str:
     """POST Method that returns an interpolated string with the parameter
 
     Parameter:
