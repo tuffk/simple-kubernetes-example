@@ -67,7 +67,7 @@ spec:
 
 ---
 
-apiVersion: v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: catedra-app
@@ -101,7 +101,7 @@ spec:
           subPath: nginx.conf
       # API Docker deployment
       - name: api
-        image: gcr.io/<project>/api:latest # our docker image
+        image: gcr.io/catedra-computo-cognitivo/api:latest # our docker image
         imagePullPolicy: IfNotPresent
         # If environment variables
         env:
