@@ -20,15 +20,21 @@ Then open a browser with the url `localhost:5000`
 
 # Endpoints
 ## GET
-`url/<name>`
-name is a string
+* `url/`
+* `url/<name>`
+   * name is a string
 
 ## POST
-`url/`
-parameter
-```json
-{
-  "name": "string"
-}
-```
-name is a string
+* `url/`
+  * parameter
+  ```json
+  {
+    "name": "string"
+  }
+  ```
+  * name is a string
+
+
+# Useful links
+* [Docker file reference](https://docs.docker.com/engine/reference/builder/)
+* [gunicorn reference](http://docs.gunicorn.org/en/stable/configure.html)
