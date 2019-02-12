@@ -21,4 +21,4 @@ ENTRYPOINT ["gunicorn", "-w", "1", "--chdir", "/app", "server:app", "-b", ":80",
 # building
 # docker build -t catedra .
 # runnning
-# docker run --rm --name potatoes -e HELLO_ENV=dokcer -p 80:80 catedra
+# docker run --rm --name srvr -e HELLO_ENV=dokcer -p 80:80 catedra
