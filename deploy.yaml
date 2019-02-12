@@ -1,0 +1,43 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: proxy
+  labels:
+    name: proxy
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: proxy-http
+    protocol: TCP
+  selector:
+    name: proxy
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: api
+  labels:
+    name: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: proxy
+  template:
+    metadata:
+      labels:
+        name: proxy
+    spec:
+      # API Docker deployment
+      - name: api
+        image: gcr.io/<project>/api:latest
+        imagePullPolicy: IfNotPresent
+        # environment variables
+        env:
+        - name: DEBUG
+          value: "True"
