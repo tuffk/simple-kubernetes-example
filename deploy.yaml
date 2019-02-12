@@ -1,9 +1,59 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-api
+data:
+  nginx.conf: |-
+    user nginx;
+    worker_processes  1;
+
+    error_log  /var/log/nginx/error.log warn;
+    pid        /var/run/nginx.pid;
+
+    events {
+      worker_connections  1024;
+    }
+
+    http {
+        include       /etc/nginx/mime.types;
+        default_type  application/octet-stream;
+
+        access_log  /var/log/nginx/access.log;
+
+        sendfile        on;
+        keepalive_timeout  650;
+        keepalive_requests 10000;
+
+        # Donde esta expuesta el api
+        upstream api {
+            server 127.0.0.1:80;
+        }
+
+        server {
+          server_name _;
+          listen 80;
+
+          location / {
+              fastcgi_read_timeout    240;
+              proxy_read_timeout      3600;
+              proxy_set_header        Host $host;
+              proxy_set_header        X-Real-IP $remote_addr;
+              proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header        X-Forwarded-Proto $scheme;
+              proxy_set_header        X-Forwarded-Host $http_host;
+              proxy_pass              http://api;
+          }
+        }
+    }
+
+---
+
 kind: Service
 apiVersion: v1
 metadata:
-  name: proxy
+  name: proxy-catedra
   labels:
-    name: proxy
+    name: proxy-catedra
 spec:
   ports:
   - name: http
@@ -11,7 +61,7 @@ spec:
     targetPort: proxy-http
     protocol: TCP
   selector:
-    name: proxy
+    name: proxy-catedra
   type: LoadBalancer
   externalTrafficPolicy: Local
 
@@ -20,24 +70,40 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: api
+  name: catedra-app
   labels:
-    name: api
+    name: catedra-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: proxy
+      name: proxy-catedra
   template:
     metadata:
       labels:
-        name: proxy
+        name: proxy-catedra
     spec:
+      volumes:
+      - name: nginx-proxy-config
+        configMap:
+          name: nginx-api # Reference to nginx configuration
+      containers:
+      - name: nginx-proxy
+        image: nginx
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: proxy-http
+          containerPort: 80
+        volumeMounts:
+        # Copy configuration into deployment
+        - name: nginx-proxy-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
       # API Docker deployment
       - name: api
         image: gcr.io/<project>/api:latest
         imagePullPolicy: IfNotPresent
-        # environment variables
+        # If environment variables
         env:
         - name: DEBUG
           value: "True"
