@@ -38,3 +38,4 @@ Then open a browser with the url `localhost:5000`
 # Useful links
 * [Docker file reference](https://docs.docker.com/engine/reference/builder/)
 * [gunicorn reference](http://docs.gunicorn.org/en/stable/configure.html)
+* [nginx reference](https://nginx.org/en/docs/)
