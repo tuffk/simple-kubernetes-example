@@ -104,7 +104,10 @@ spec:
         - name: nginx-proxy-config
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
-      - args:
+      # API Docker deployment
+      - name: api
+        image: gcr.io/catedra-computo-cognitivo/api:latest # our docker image
+        args:
         - gunicorn
         - -w
         - '1'
@@ -116,9 +119,6 @@ spec:
         - --name
         - app
         - --log-file=uni.log
-      # API Docker deployment
-      - name: api
-        image: gcr.io/catedra-computo-cognitivo/api:latest # our docker image
         imagePullPolicy: IfNotPresent
         # If environment variables
         env:
